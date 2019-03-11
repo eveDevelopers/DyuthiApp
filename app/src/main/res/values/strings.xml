@@ -96,4 +96,5 @@
     <string name="foot_loose">DANCE</string>
     <string name="_14">14</string>
     <string name="_17">17</string>
+    <string name="title_activity_event">EventActivity</string>
 </resources>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ScrollingActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:background="@color/dark"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="8dp"
+                    android:layout_margin="5dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sample"
+                        android:transitionName="simple_activity_transition" />
+
+                    <LinearLayout
+                        android:id="@+id/row_sec_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@drawable/gradient"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/date1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="@string/_14"
+                            android:background="@drawable/round"
+                            android:textStyle="italic"
+                            android:gravity="center"
+                            android:textColor="@color/dark"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="80dp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/event_title1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="bottom"
+                            android:text="XYZ"
+                            android:textColor="@color/normal_white"
+                            android:paddingBottom="16dp"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:cardCornerRadius="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/agam"
+                        android:transitionName="simple_activity_transition" />
+
+                    <LinearLayout
+                        android:id="@+id/row_sec_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@drawable/gradient"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/date2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="@string/_15"
+                            android:background="@drawable/round"
+                            android:textStyle="italic"
+                            android:gravity="center"
+                            android:textColor="@color/dark"
+                            android:layout_marginBottom="80dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/event_title2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="bottom"
+                            android:text="@string/enigma"
+                            android:textColor="@color/normal_white"
+                            android:paddingBottom="16dp"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+
+
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:cardCornerRadius="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/dance"
+                        android:transitionName="simple_activity_transition" />
+
+                    <LinearLayout
+                        android:id="@+id/row_sec_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@drawable/gradient"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/date3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="@string/_16"
+                            android:layout_marginBottom="80dp"
+                            android:background="@drawable/round"
+                            android:textStyle="italic"
+                            android:textColor="@color/dark"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/event_title3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="bottom"
+                            android:text="@string/foot_loose"
+                            android:textColor="@color/normal_white"
+                            android:paddingBottom="16dp"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="180dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    app:cardCornerRadius="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/nucleya"
+                        android:transitionName="simple_activity_transition" />
+
+                    <LinearLayout
+                        android:id="@+id/row_sec_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@drawable/gradient"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/date4"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:text="@string/_17"
+                            android:background="@drawable/round"
+                            android:layout_marginBottom="80dp"
+                            android:textStyle="italic"
+                            android:textColor="@color/dark"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/event_title4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="bottom"
+                            android:text="NUCLEYA"
+                            android:textColor="@color/normal_white"
+                            android:paddingBottom="16dp"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_scrolling" />
+
+
+</android.support.design.widget.CoordinatorLayout>

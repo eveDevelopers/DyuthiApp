@@ -73,10 +73,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     //private List<Schedule> send_schedule;
 
     ImageView dayImage2,dayImage3,dayImage4;
-    String url1 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi4p-rytfzgAhVWOSsKHaTIBDcQjRx6BAgBEAU&url=https%3A%2F%2Fwww.justdial.com%2Fentertainment%2Fartist%2FGowry-Lekshmi%2FA839744&psig=AOvVaw3BRchgYeyVzfCZBefmzMly&ust=1552473809853704";
-    String url2 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiIwdbTtfzgAhWPfX0KHWHPDnEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.oklisten.com%2Falbum%2Fsaagara_shayana_vibho&psig=AOvVaw0PGXOhvjev17FTAVyX6_az&ust=1552473763489338";
-    String url3 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjBwNWDtvzgAhXEe30KHYnGBaAQjRx6BAgBEAU&url=https%3A%2F%2Freacho.in%2Fpune%2Fevent%2Fkingfisher-buzz-presents-nucleya-raja-baja-album-launch&psig=AOvVaw02Se9ysrhha9_eyLaVsxPn&ust=1552473869064267";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

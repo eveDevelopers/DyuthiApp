@@ -25,6 +25,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 public class EventActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,7 +37,10 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     int image_id;
     TextView coordinator_name,venue,description,date_time;
     String phone;
-    LinearLayout coordinator_name_layout;
+    LinearLayout coordinator_name_layout,cash;
+    EventlistItem eventlistItem;
+    TextView fee,prize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,23 +54,19 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         venue = findViewById(R.id.venue);
         description = findViewById(R.id.description);
         date_time = findViewById(R.id.date_time);
+        cash = findViewById(R.id.cash);
+        fee = findViewById(R.id.fee);
+        prize = findViewById(R.id.prize);
         coordinator_name_layout.setOnClickListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //setColor();
-        setImagePro();
+        setData();
+
 
     }
 
-    private void setImagePro() {
+    private void setData() {
         image_id = getIntent().getIntExtra("image_id",0);
         if(image_id!=0){
             Glide.with(this).load(image_id).into(toolbar_image);
@@ -74,9 +76,45 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             venue.setText(getIntent().getStringExtra("venue"));
             description.setText(getIntent().getStringExtra("description"));
             phone = getIntent().getStringExtra("coordinator_no");
+            cash.setVisibility(View.GONE);
+        }else {
+            Gson gson = new Gson();
+            String obj = getIntent().getStringExtra("object");
+            eventlistItem = gson.fromJson(obj,EventlistItem.class);
+            coordinator_name.setText(eventlistItem.getCoordinator_name());
+            String date_t = getDateTimeString(eventlistItem);
+            date_time.setText(date_t);
+            String venue_t = getVenueString(eventlistItem);
+            venue.setText(venue_t);
+            getSupportActionBar().setTitle(eventlistItem.getEvent_name());
+            description.setText(eventlistItem.getEvent_desc());
+            fee.setText("Registration fees: "+String.valueOf(eventlistItem.getEvent_fees()));
+            prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));
         }
 
     }
+
+    private String getDateTimeString(EventlistItem eventlistItem) {
+        String rounds = "";
+        List<Schedule> scheduleList = eventlistItem.getSchedule();
+        for (int i=0;i<scheduleList.size();i++) {
+            Schedule schedule = scheduleList.get(i);
+            rounds+=schedule.getRound_name()+" : "+schedule.getRound_date()+","+schedule.getRound_time();
+            rounds+="\n";
+        }
+        return rounds;
+    }
+    private String getVenueString(EventlistItem eventlistItem) {
+        String rounds = "";
+        List<Schedule> scheduleList = eventlistItem.getSchedule();
+        for (int i=0;i<scheduleList.size();i++) {
+            Schedule schedule = scheduleList.get(i);
+            rounds+=schedule.getRound_name()+" : "+schedule.getRound_venue();
+            rounds+="\n";
+        }
+        return rounds;
+    }
+
     void callCoordinator(String phone){
         Intent intent = new Intent(Intent.ACTION_DIAL);
         Uri uri = Uri.parse("tel:" + phone.trim());

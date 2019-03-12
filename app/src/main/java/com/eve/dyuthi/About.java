@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide;
         visit_web.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("http://techfest.ktu.edu.in/");
+                Uri uri = Uri.parse("https://dyuthi.live/");
                 CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
                 intentBuilder.setShowTitle(true);
                 intentBuilder.setToolbarColor(ContextCompat.getColor(About.this, R.color.normal_white));

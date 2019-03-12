@@ -19,6 +19,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,12 +68,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
      */
     private ViewPager mViewPager;
     CardView day2,day3,day4;
-
-    String event_url="http://192.168.43.183:8000/events/";
-    private List<EventlistItem> itemList;
-    private List<Schedule> schedules;
-    //private List<Schedule> send_schedule;
-
     ImageView dayImage2,dayImage3,dayImage4;
 
     @Override
@@ -90,10 +86,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         day3.setOnClickListener(this);
         day4.setOnClickListener(this);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         Glide.with(this).load(R.drawable.day2).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
@@ -143,9 +137,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.day4:
 
-                startActivity(new Intent(getApplicationContext(),EventActivity.class));
-                CollectEvent();
-
                 Intent intent3 = new Intent(ScrollingActivity.this  , EventActivity.class);
                 intent3.putExtra("image_id",R.drawable.nucleya);
                 intent3.putExtra("name","Nucleya");
@@ -174,6 +165,11 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private List<EventlistItem> generalitemList,musicitemList,danceitemList,literatureitemList,artitemList,otheritemList;
+        private List<Schedule> schedules;
+        String event_url="http://192.168.43.183:8000/events/";
+        private RecyclerView.Adapter adapter;
+        private RecyclerView recyclerView;
 
         public PlaceholderFragment() {
         }
@@ -194,10 +190,109 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
+           // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            recyclerView = rootView.findViewById(R.id.view_list);
+            recyclerView.hasFixedSize();
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            generalitemList= new ArrayList<>();
+            musicitemList = new ArrayList<>();
+            danceitemList = new ArrayList<>();
+            literatureitemList=new ArrayList<>();
+            artitemList=new ArrayList<>();
+            otheritemList = new ArrayList<>();
+            schedules = new ArrayList<>();
+            CollectEvent();
+            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
+                case 1 :    adapter = new EventAdapter(getContext(),generalitemList);
+                            recyclerView.setAdapter(adapter);
+                case 2 :    adapter = new EventAdapter(getContext(),musicitemList);
+                            recyclerView.setAdapter(adapter);
+                case 3 :    adapter = new EventAdapter(getContext(),danceitemList);
+                            recyclerView.setAdapter(adapter);
+                case 4 :    adapter = new EventAdapter(getContext(),literatureitemList);
+                            recyclerView.setAdapter(adapter);
+                case 5 :    adapter = new EventAdapter(getContext(),artitemList);
+                            recyclerView.setAdapter(adapter);
+                case 6 :    adapter = new EventAdapter(getContext(),otheritemList);
+                            recyclerView.setAdapter(adapter);
+            }
+            //textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
 
             return rootView;
+        }
+
+        public void CollectEvent(){
+            final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, event_url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray jsonArray = jsonObject.getJSONArray("event_list");
+                        for(int i =0;i<jsonArray.length();i++)
+                        {
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            //Log.e("response",data.get("category").toString());
+                            JSONArray jsonArray1 = data.getJSONArray("events");
+                            for(int j=0;j<jsonArray1.length();j++){
+                                JSONObject data1 =  jsonArray1.getJSONObject(j);
+                                String event_name = data1.getString("event_name");
+                                String event_desc = data1.getString("event_desc");
+                                String coordinator_name = data1.getString("coordinator_name");
+                                String coordinator_phone =  data1.getString("coordinator_phone");
+                                int event_fees = data1.getInt("event_fees");
+                                String category = data1.getString("category");
+                                int prize = data1.getInt("prize");
+                                String img_url = data1.getString("poster");
+                                JSONArray jsonArray2 = data1.getJSONArray("schedules");
+                                for(int k=0;k<jsonArray2.length();k++)
+                                {
+                                    JSONObject data2 = jsonArray2.getJSONObject(k);
+                                    String round_name = data2.getString("round_name");
+                                    String round_time = data2.getString("round_time");
+                                    String round_date = data2.getString("round_date");
+                                    String round_venue = data2.getString("round_venue");
+                                    Schedule schedule = new Schedule(round_name,round_time,round_date,round_venue);
+                                    schedules.add(schedule);
+                                }
+                                EventlistItem eventlistItem = new EventlistItem(event_name,event_desc,coordinator_name,coordinator_phone,category,event_fees,prize,schedules,img_url);
+                                switch(category){
+                                    case "general":
+                                        generalitemList.add(eventlistItem);
+                                        break;
+                                    case  "music" :
+                                        musicitemList.add(eventlistItem);
+                                        break;
+                                    case  "dance" :
+                                        danceitemList.add(eventlistItem);
+                                        break;
+                                    case  "literature" :
+                                        literatureitemList.add(eventlistItem);
+                                        break;
+                                    case  "art" :
+                                        artitemList.add(eventlistItem);
+                                        break;
+                                    case   "others" :
+                                        otheritemList.add(eventlistItem);
+                                        break;
+                                }
+                            }
+                        }
+                        //Log.e("event_namre",itemList.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("jsonerror",e.toString());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.e("error",error.toString());
+                }
+            });
+            requestQueue.add(stringRequest);
+
         }
     }
 
@@ -226,62 +321,28 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void CollectEvent(){
-        itemList= new ArrayList<>();
-        schedules = new ArrayList<>();
-
-        final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, event_url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("event_list");
-                    for(int i =0;i<jsonArray.length();i++)
-                    {
-                        JSONObject data = jsonArray.getJSONObject(i);
-                        Log.e("response",data.get("category").toString());
-                        JSONArray jsonArray1 = data.getJSONArray("events");
-                        for(int j=0;j<jsonArray1.length();j++){
-                        JSONObject data1 =  jsonArray1.getJSONObject(j);
-                        String event_name = data1.getString("event_name");
-                        String event_desc = data1.getString("event_desc");
-                        String coordinator_name = data1.getString("coordinator_name");
-                        String coordinator_phone =  data1.getString("coordinator_phone");
-                        int event_fees = data1.getInt("event_fees");
-                        String category = data1.getString("category");
-                        int prize = data1.getInt("prize");
-                        String img_url = data1.getString("ing_url");
-                        JSONArray jsonArray2 = data1.getJSONArray("schedules");
-                        for(int k=0;k<jsonArray2.length();k++)
-                        {
-                            JSONObject data2 = jsonArray2.getJSONObject(k);
-                            String round_name = data2.getString("round_name");
-                            String round_time = data2.getString("round_time");
-                            String round_date = data2.getString("round_date");
-                            String round_venue = data2.getString("round_venue");
-                            Schedule schedule = new Schedule(round_name,round_time,round_date,round_venue);
-                            schedules.add(schedule);
-                        }
-                        EventlistItem eventlistItem = new EventlistItem(event_name,event_desc,coordinator_name,coordinator_phone,category,event_fees,prize,schedules,img_url);
-                        itemList.add(eventlistItem);
-
-                        }
-                    }
-                    Log.e("event_namre",itemList.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("jsonerror",e.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.e("error",error.toString());
-            }
-        });
-        requestQueue.add(stringRequest);
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(ScrollingActivity.this,About.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

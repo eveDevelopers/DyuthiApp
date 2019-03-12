@@ -67,8 +67,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void setData() {
-        image_id = getIntent().getIntExtra("image_id",0);
-        if(image_id!=0){
+        image_id = getIntent().getIntExtra("image_id",-1);
+        if(image_id!=-1){
             Glide.with(this).load(image_id).into(toolbar_image);
             getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
             coordinator_name.setText(getIntent().getStringExtra("coordinator_name"));

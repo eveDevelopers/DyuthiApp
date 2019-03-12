@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:transitionName="@string/transition"
     tools:context=".ScrollingActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
-        android:background="@color/dark"
+        android:background="@color/normal_white"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -28,75 +29,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/normal_white">
+
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="180dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="5dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/sample"
-                        android:transitionName="simple_activity_transition" />
-
-                    <LinearLayout
-                        android:id="@+id/row_sec_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end"
-                        android:background="@drawable/gradient"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/date1"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:text="@string/_14"
-                            android:background="@drawable/round"
-                            android:textStyle="italic"
-                            android:gravity="center"
-                            android:textColor="@color/dark"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="80dp"
-                            android:layout_gravity="center_horizontal"
-                            />
-
-
-                        <TextView
-                            android:id="@+id/event_title1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="bottom"
-                            android:text="XYZ"
-                            android:textColor="@color/normal_white"
-                            android:paddingBottom="16dp"
-                            android:layout_weight="1"/>
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
+                    android:id="@+id/day2"
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
+                    app:cardElevation="2dp"
                     app:cardCornerRadius="8dp">
 
                     <ImageView
+                        android:id="@+id/dayImg2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/agam"
+                        android:src="@drawable/day2"
                         android:transitionName="simple_activity_transition" />
 
                     <LinearLayout
@@ -128,7 +85,7 @@
                             android:layout_height="0dp"
                             android:layout_gravity="center_horizontal"
                             android:gravity="bottom"
-                            android:text="@string/enigma"
+                            android:text="@string/day2"
                             android:textColor="@color/normal_white"
                             android:paddingBottom="16dp"
                             android:layout_weight="1"/>
@@ -138,17 +95,19 @@
 
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
+                    android:id="@+id/day3"
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
+                    app:cardElevation="2dp"
                     app:cardCornerRadius="8dp">
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/dance"
+                        android:src="@drawable/agam"
                         android:transitionName="simple_activity_transition" />
 
                     <LinearLayout
@@ -180,7 +139,7 @@
                             android:layout_height="0dp"
                             android:layout_gravity="center_horizontal"
                             android:gravity="bottom"
-                            android:text="@string/foot_loose"
+                            android:text="@string/agam"
                             android:textColor="@color/normal_white"
                             android:paddingBottom="16dp"
                             android:layout_weight="1"/>
@@ -189,10 +148,12 @@
 
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
+                    android:id="@+id/day4"
                     android:layout_width="0dp"
                     android:layout_height="180dp"
                     android:layout_weight="1"
                     android:layout_margin="5dp"
+                    app:cardElevation="2dp"
                     app:cardCornerRadius="8dp">
 
                     <ImageView
@@ -252,6 +213,8 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
+
+
 
     <include layout="@layout/content_scrolling" />
 

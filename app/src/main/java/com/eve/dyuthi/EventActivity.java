@@ -1,8 +1,10 @@
 package com.eve.dyuthi;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,25 +19,36 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     ImageView toolbar_image;
     CollapsingToolbarLayout ctb;
     int image_id;
+    TextView coordinator_name,venue,description,date_time;
+    String phone;
+    LinearLayout coordinator_name_layout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ctb = findViewById(R.id.collapsingToolbar);
         toolbar_image = findViewById(R.id.toolbarImage);
-        setSupportActionBar(toolbar);
+        coordinator_name = findViewById(R.id.coordinator_name);
+        coordinator_name_layout = findViewById(R.id.coordinator_name_layout);
+        venue = findViewById(R.id.venue);
+        description = findViewById(R.id.description);
+        date_time = findViewById(R.id.date_time);
+        coordinator_name_layout.setOnClickListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -56,10 +69,20 @@ public class EventActivity extends AppCompatActivity {
         if(image_id!=0){
             Glide.with(this).load(image_id).into(toolbar_image);
             getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
+            coordinator_name.setText(getIntent().getStringExtra("coordinator_name"));
+            date_time.setText(getIntent().getStringExtra("date"));
+            venue.setText(getIntent().getStringExtra("venue"));
+            description.setText(getIntent().getStringExtra("description"));
+            phone = getIntent().getStringExtra("coordinator_no");
         }
 
     }
-
+    void callCoordinator(String phone){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri uri = Uri.parse("tel:" + phone.trim());
+        intent.setData(uri);
+        startActivity(intent);
+    }
     public void setColor(){
         Glide.with(this).asBitmap().
                 load(R.drawable.agam).
@@ -116,5 +139,14 @@ public class EventActivity extends AppCompatActivity {
     {
         super.onBackPressed();
         ActivityCompat.finishAfterTransition(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.coordinator_name_layout:
+                    callCoordinator(phone);
+                    break;
+            }
     }
 }

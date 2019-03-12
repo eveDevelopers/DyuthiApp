@@ -196,6 +196,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
+
             return rootView;
         }
     }

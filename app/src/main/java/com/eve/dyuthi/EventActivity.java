@@ -81,6 +81,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             Gson gson = new Gson();
             String obj = getIntent().getStringExtra("object");
             eventlistItem = gson.fromJson(obj,EventlistItem.class);
+            Glide.with(this).load(eventlistItem.getImg_url()).into(toolbar_image);
             coordinator_name.setText(eventlistItem.getCoordinator_name());
             String date_t = getDateTimeString(eventlistItem);
             date_time.setText(date_t);

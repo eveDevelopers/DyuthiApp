@@ -36,7 +36,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    CardView day1,day2,day3,day4;
+    CardView day2,day3,day4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_scrolling);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        day1 = findViewById(R.id.day1);
         day2 = findViewById(R.id.day2);
         day3 = findViewById(R.id.day3);
         day4 = findViewById(R.id.day4);
-        day1.setOnClickListener(this);
         day2.setOnClickListener(this);
         day3.setOnClickListener(this);
         day4.setOnClickListener(this);
@@ -69,7 +67,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.day1:
             case R.id.day2:
             case R.id.day3:
             case R.id.day4:

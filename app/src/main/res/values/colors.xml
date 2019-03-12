@@ -6,4 +6,5 @@
     <color name="normal_white">#fafafa</color>
     <color name="dark">#212121</color>
     <color name="blue">#2196F3</color>
+    <color name="true_black">#000000</color>
 </resources>

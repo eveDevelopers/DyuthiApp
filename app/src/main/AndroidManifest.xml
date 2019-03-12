@@ -13,7 +13,7 @@
             android:name=".EventActivity"
             android:label="@string/title_activity_event"
             android:parentActivityName=".ScrollingActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eve.dyuthi.ScrollingActivity" />

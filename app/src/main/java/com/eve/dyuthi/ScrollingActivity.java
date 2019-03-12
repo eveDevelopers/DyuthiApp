@@ -1,15 +1,21 @@
 package com.eve.dyuthi;
 
+
 import android.app.DownloadManager;
+
+import android.app.Activity;
+
 import android.content.Intent;
 import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -20,6 +26,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +46,8 @@ import java.util.List;
 
 import static java.nio.file.Paths.get;
 
+import com.bumptech.glide.Glide;
+
 public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
 
     /**
@@ -57,10 +66,17 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
      */
     private ViewPager mViewPager;
     CardView day2,day3,day4;
+
     String event_url="http://192.168.43.183:8000/events/";
     private List<EventlistItem> itemList;
     private List<Schedule> schedules;
     //private List<Schedule> send_schedule;
+
+    ImageView dayImage2,dayImage3,dayImage4;
+    String url1 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi4p-rytfzgAhVWOSsKHaTIBDcQjRx6BAgBEAU&url=https%3A%2F%2Fwww.justdial.com%2Fentertainment%2Fartist%2FGowry-Lekshmi%2FA839744&psig=AOvVaw3BRchgYeyVzfCZBefmzMly&ust=1552473809853704";
+    String url2 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiIwdbTtfzgAhWPfX0KHWHPDnEQjRx6BAgBEAU&url=https%3A%2F%2Fwww.oklisten.com%2Falbum%2Fsaagara_shayana_vibho&psig=AOvVaw0PGXOhvjev17FTAVyX6_az&ust=1552473763489338";
+    String url3 = "https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjBwNWDtvzgAhXEe30KHYnGBaAQjRx6BAgBEAU&url=https%3A%2F%2Freacho.in%2Fpune%2Fevent%2Fkingfisher-buzz-presents-nucleya-raja-baja-album-launch&psig=AOvVaw02Se9ysrhha9_eyLaVsxPn&ust=1552473869064267";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +87,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         day2 = findViewById(R.id.day2);
         day3 = findViewById(R.id.day3);
         day4 = findViewById(R.id.day4);
+        dayImage2 = findViewById(R.id.dayImg2);
+        dayImage3 = findViewById(R.id.dayImg3);
+        dayImage4 = findViewById(R.id.dayImg4);
         day2.setOnClickListener(this);
         day3.setOnClickListener(this);
         day4.setOnClickListener(this);
@@ -79,7 +98,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-
+        Glide.with(this).load(R.drawable.day2).into(dayImage2);
+        Glide.with(this).load(R.drawable.agam).into(dayImage3);
+        Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
         TabLayout tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -92,10 +113,43 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.day2:
+                Intent intent = new Intent(ScrollingActivity.this  , EventActivity.class);
+                intent.putExtra("image_id",R.drawable.day2);
+                intent.putExtra("name","Live Concert");
+                ActivityOptionsCompat options =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                         dayImage2,
+                        "simple_activity_transition");
+
+                startActivity(intent , options.toBundle());
+                break;
             case R.id.day3:
+                Intent intent2 = new Intent(ScrollingActivity.this  , EventActivity.class);
+                intent2.putExtra("image_id",R.drawable.agam);
+                intent2.putExtra("name","Agam");
+                ActivityOptionsCompat options2 =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        dayImage3,
+                        "simple_activity_transition");
+
+                startActivity(intent2 , options2.toBundle());
+                break;
+
             case R.id.day4:
+
                 startActivity(new Intent(getApplicationContext(),EventActivity.class));
                 CollectEvent();
+
+                Intent intent3 = new Intent(ScrollingActivity.this  , EventActivity.class);
+                intent3.putExtra("image_id",R.drawable.nucleya);
+                intent3.putExtra("name","Nucleya");
+                ActivityOptionsCompat options3 =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        dayImage4,
+                        "simple_activity_transition");
+
+                startActivity(intent3 , options3.toBundle());
+
                 break;
         }
     }

@@ -94,7 +94,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             venue.setText(venue_t);
             getSupportActionBar().setTitle(eventlistItem.getEvent_name());
             phone = eventlistItem.getCoordinator_phone();
-            description.setText(Html.fromHtml(eventlistItem.getEvent_desc()).toString().replaceAll("\"",""));
+            description.setText(eventlistItem.getRenderedDescription().replaceAll("\"",""));
+            //
             fee.setText("Registration fees: "+eventlistItem.getEvent_fees());
             prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));
         }
@@ -106,7 +107,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         List<Schedule> scheduleList = eventlistItem.getSchedule();
         for (int i=0;i<scheduleList.size();i++) {
             Schedule schedule = scheduleList.get(i);
-            rounds+=schedule.getRound_name()+" : "+schedule.getRound_date().substring(0,schedule.getRound_date().length()-6)+","+schedule.getRound_time();
+            try {
+                rounds += schedule.getRound_name() + " : " + schedule.getRound_date().substring(0, schedule.getRound_date().length() - 6) + "," + schedule.getRound_time();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             rounds+="\n";
         }
         return rounds.trim();

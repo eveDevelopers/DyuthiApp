@@ -136,8 +136,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 Intent intent = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent.putExtra("image_id", R.drawable.day2);
                 intent.putExtra("name", "GOWRY LAKSHMI");
-                intent.putExtra("coordinator_name", "Philip Paul");
-                intent.putExtra("coordinator_no", "8281742377");
+                intent.putExtra("coordinator_name", "Contact");
+                intent.putExtra("coordinator_no", "8089521307");
                 intent.putExtra("date", "15/03/19");
                 intent.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent.putExtra("description", getString(R.string.gowry));
@@ -152,8 +152,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 Intent intent2 = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent2.putExtra("image_id", R.drawable.agam);
                 intent2.putExtra("name", "AGAM NITE");
-                intent2.putExtra("coordinator_name", "Philip Paul");
-                intent2.putExtra("coordinator_no", "8281742377");
+                intent2.putExtra("coordinator_name", "Contact");
+                intent2.putExtra("coordinator_no", "9562466182");
                 intent2.putExtra("date", "16/03/19");
                 intent2.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent2.putExtra("description", getString(R.string.agam1));
@@ -170,8 +170,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 Intent intent3 = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent3.putExtra("image_id", R.drawable.nucleya);
                 intent3.putExtra("name", "NUCLEYA");
-                intent3.putExtra("coordinator_name", "Philip Paul");
-                intent3.putExtra("coordinator_no", "8281742377");
+                intent3.putExtra("coordinator_name", "Contact");
+                intent3.putExtra("coordinator_no", "9562466182");
                 intent3.putExtra("date", "17/03/19");
                 intent3.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent3.putExtra("description", getString(R.string.nucleya));
@@ -408,7 +408,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                     recyclerView.setVisibility(View.VISIBLE);
                     error.printStackTrace();
                     //Log.e("error", error.toString());
-                    Toast.makeText(getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
+                    try {
+                        Toast.makeText(getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
             });
             requestQueue.add(stringRequest);

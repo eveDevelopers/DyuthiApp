@@ -58,7 +58,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         }
 
         setDominantColor(holder,-1,ev.getImg_url());
-        holder.date.setText(date_time.substring(0,date_time.length()-6));
+        try {
+            holder.date.setText(date_time.substring(0, date_time.length() - 6));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         holder.cardItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,8 @@
 package com.eve.dyuthi;
 
+import android.os.Build;
+import android.text.Html;
+
 import java.util.List;
 
 public class EventlistItem {
@@ -57,5 +60,19 @@ public class EventlistItem {
 
     public String getImg_url() {
         return img_url;
+    }
+    public String getRenderedDescription() {
+        if ( this.event_desc.startsWith("\"")){
+            this.event_desc = this.event_desc.substring(1);
+        }
+        if ( this.event_desc.endsWith("\\")){
+            this.event_desc = this.event_desc.substring(0, this.event_desc.length()-1);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(this.event_desc, Html.FROM_HTML_MODE_COMPACT).toString();
+        } else {
+            return Html.fromHtml(this.event_desc).toString();
+        }
     }
 }

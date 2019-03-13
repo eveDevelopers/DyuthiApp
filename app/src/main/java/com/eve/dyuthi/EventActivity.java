@@ -106,7 +106,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         List<Schedule> scheduleList = eventlistItem.getSchedule();
         for (int i=0;i<scheduleList.size();i++) {
             Schedule schedule = scheduleList.get(i);
-            rounds+="Round: "+schedule.getRound_name()+" : "+schedule.getRound_date().substring(0,schedule.getRound_date().length()-6)+","+schedule.getRound_time();
+            rounds+=schedule.getRound_name()+" : "+schedule.getRound_date().substring(0,schedule.getRound_date().length()-6)+","+schedule.getRound_time();
             rounds+="\n";
         }
         return rounds.trim();

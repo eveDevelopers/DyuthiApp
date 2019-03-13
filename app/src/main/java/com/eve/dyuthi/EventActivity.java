@@ -15,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -88,7 +90,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             String venue_t = getVenueString(eventlistItem);
             venue.setText(venue_t);
             getSupportActionBar().setTitle(eventlistItem.getEvent_name());
-            description.setText(eventlistItem.getEvent_desc());
+            description.setText(Html.fromHtml(eventlistItem.getEvent_desc()).toString().replaceAll("\"",""));
             fee.setText("Registration fees: "+eventlistItem.getEvent_fees());
             prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));
         }

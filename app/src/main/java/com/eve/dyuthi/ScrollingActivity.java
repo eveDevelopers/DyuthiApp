@@ -228,18 +228,21 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                     case 1:
                         obj_str = sharedPreferences.getString("gen_list", "");
                         generalitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong",generalitemList.toString());
                         adapter = new EventAdapter(getContext(), generalitemList);
                         recyclerView.setAdapter(adapter);
                         break;
                     case 2:
                         obj_str = sharedPreferences.getString("mus_list", "");
                         musicitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), musicitemList);
-                        recyclerView.setAdapter(adapter);
+                        //Log.e("jsong",musicitemList.toString());
+                        //adapter = new EventAdapter(getContext(), musicitemList);
+                        //recyclerView.setAdapter(adapter);
                         break;
                     case 3:
                         obj_str = sharedPreferences.getString("dance_list", "");
                         danceitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong",danceitemList.toString());
                         adapter = new EventAdapter(getContext(), danceitemList);
                         recyclerView.setAdapter(adapter);
                         break;

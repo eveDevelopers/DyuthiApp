@@ -228,8 +228,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                     case 1:
                         obj_str = sharedPreferences.getString("gen_list", "");
                         generalitemList = gson.fromJson(obj_str, type);
-                        //adapter = new EventAdapter(getContext(), generalitemList);
-                        //recyclerView.setAdapter(adapter);
+                        adapter = new EventAdapter(getContext(), generalitemList);
+                        recyclerView.setAdapter(adapter);
                         break;
                     case 2:
                         obj_str = sharedPreferences.getString("mus_list", "");
@@ -310,6 +310,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                                 }
                                 EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, schedules, img_url);
                                 category = category.toLowerCase();
+                                Log.e("Cat",category);
                                 if (category.equals("general")) {
                                     generalitemList.add(eventlistItem);
                                 } else if (category.equals("music")) {
@@ -320,15 +321,15 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                                     literatureitemList.add(eventlistItem);
                                 } else if (category.equals("art")) {
                                     artitemList.add(eventlistItem);
-                                } else if (category.equals("others")) {
+                                } else if (category.equals("talk/stage/theatre")) {
                                     otheritemList.add(eventlistItem);
                                 }
 
                             }
                         }
                         Log.e("length_mus", String.valueOf(musicitemList.size()));
-//                        adapter = new EventAdapter(getContext(), generalitemList);
-//                        recyclerView.setAdapter(adapter);
+                        adapter = new EventAdapter(getContext(), generalitemList);
+                        recyclerView.setAdapter(adapter);
                         SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
                         SharedPreferences.Editor edit_list = sharedPreferences.edit();
                         Gson gson = new Gson();

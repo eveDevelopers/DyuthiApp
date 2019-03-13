@@ -89,6 +89,22 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="gowry">
+        A force to reckon with, lyricist, playback singer and music composer @gowrylekshmih is making waves with her music on Dyuthi XIX !!
+    </string>
+    <string name="agam1">
+         Music that stirs the soul, hardly goes by unnoticed.
+         So does the virtuosity of ‘Agam’-a set of technically impeccable musicians, with an undefeatable eye for achieving ‘modernity in classical compositions’.
+         It’s more than a matter of mere pride and felicity for us that ‘Agam’ will be performing on March 16th at Government Engineering College, Thrissur, in association with Dyuthi 19’.
+         We’re all eagerly waiting to get stupefied by their inexplicable magic, disguised in the form of agitating voices and their soothing accompaniments
+         The wait is on, already. Excitement will touch its peaks, once equally turned on!
+    </string>
+    <string name = "nucleya">
+         Some names agitate us like wild storms with their filling memories.
+         ‘The breath of a dainty beast’ you may call it. A familiar name; a musical beast from our own household will be arriving soon.
+         One who has made hidden cultivations in musical mishmashes-his strongest suit, improbable sounds-his own instruments, enormous bass-his endearing signature and a unique fusion of ethnicity and cutting edge technicalities-his art and ambition.....’Nucleya’ will be here this Dyuthi, to take you all away to his own ambit.
+         Mark the date-March 17!
+    </string>
     <string name="action_settings">About</string>
     <string name="day2">LIVE CONCERT</string>
     <string name="_15">15</string>
@@ -97,7 +113,7 @@
     <string name="_14">14</string>
     <string name="_17">17</string>
     <string name="title_activity_event">EventActivity</string>
-    <string name="agam">AGAM</string>
+    <string name="agam">AGAM NITE</string>
     <string name="transition">transition</string>
     <string name="about">This time around, Dyuthi is going to be celebrated as a National Level Arts Fest. Dyuthi is always the biggest carnival in GEC, where a blend of the most talented and the most diverse array of energetic college going youth from the South of India gather. Unlike previous years in which the artistic creativity of its participants had to be complimented by technical acumen, this year Dyuthi allows its participants to let flow their creative energy. Just like its meaning, Dyuthi is a festival that glows, bringing together the zeal and zest of everyone involved to make something truly special and memorable.</string>
     <string name="about_heading">This time vibe is gonna lose its dimensions</string>

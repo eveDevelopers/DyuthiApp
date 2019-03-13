@@ -135,12 +135,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             case R.id.day2:
                 Intent intent = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent.putExtra("image_id", R.drawable.day2);
-                intent.putExtra("name", "Live Concert");
+                intent.putExtra("name", "GOWRY LAKSHMI");
                 intent.putExtra("coordinator_name", "Philip Paul");
                 intent.putExtra("coordinator_no", "8281742377");
                 intent.putExtra("date", "15/03/19");
                 intent.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
-                intent.putExtra("description", getString(R.string.large_text));
+                intent.putExtra("description", getString(R.string.gowry));
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
                         dayImage2,
@@ -151,12 +151,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             case R.id.day3:
                 Intent intent2 = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent2.putExtra("image_id", R.drawable.agam);
-                intent2.putExtra("name", "Agam");
+                intent2.putExtra("name", "AGAM NITE");
                 intent2.putExtra("coordinator_name", "Philip Paul");
                 intent2.putExtra("coordinator_no", "8281742377");
                 intent2.putExtra("date", "16/03/19");
                 intent2.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
-                intent2.putExtra("description", getString(R.string.large_text));
+                intent2.putExtra("description", getString(R.string.agam1));
                 ActivityOptionsCompat options2 = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
                         dayImage3,
@@ -169,12 +169,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 
                 Intent intent3 = new Intent(ScrollingActivity.this, EventActivity.class);
                 intent3.putExtra("image_id", R.drawable.nucleya);
-                intent3.putExtra("name", "Nucleya");
+                intent3.putExtra("name", "NUCLEYA");
                 intent3.putExtra("coordinator_name", "Philip Paul");
                 intent3.putExtra("coordinator_no", "8281742377");
                 intent3.putExtra("date", "17/03/19");
                 intent3.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
-                intent3.putExtra("description", getString(R.string.large_text));
+                intent3.putExtra("description", getString(R.string.nucleya));
                 ActivityOptionsCompat options3 = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
                         dayImage4,
@@ -406,7 +406,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                     progressBar.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                     error.printStackTrace();
-                    Log.e("error", error.toString());
+                    //Log.e("error", error.toString());
                     Toast.makeText(getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
                 }
             });

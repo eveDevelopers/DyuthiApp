@@ -51,14 +51,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.Name.setText(ev.getEvent_name());
         String date_time;
         try {
-            date_time = ev.getSchedule().get(0).getRound_time()+","+ev.getSchedule().get(0).getRound_date();
+            date_time = ev.getSchedule().get(0).getRound_time()+", "+ev.getSchedule().get(0).getRound_date();
             Log.e("date_time",date_time);
         }catch (Exception e){
             date_time = "";
         }
 
         setDominantColor(holder,-1,ev.getImg_url());
-        holder.date.setText(date_time);
+        holder.date.setText(date_time.substring(0,date_time.length()-6));
         holder.cardItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

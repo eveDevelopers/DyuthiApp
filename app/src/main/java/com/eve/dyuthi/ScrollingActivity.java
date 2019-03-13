@@ -340,18 +340,19 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                                 String img_url = data1.getString("poster");
                                 img_url = "https://dyuthi.live/static/"+ img_url;
                                 JSONArray jsonArray2 = data1.getJSONArray("schedule");
-                                schedules.clear();
+                                List<Schedule> scheduleList = new ArrayList<>();
+                                //scheduleList.clear();
                                 for (int k = 0; k < jsonArray2.length(); k++) {
                                     JSONObject data2 = jsonArray2.getJSONObject(k);
                                     String round_name = data2.getString("round_name");
                                     String round_time = data2.getString("round_time");
                                     String round_date = data2.getString("round_date");
                                     String round_venue = data2.getString("round_venue");
-                                    Log.e("round date",round_date+round_time);
+                                   // Log.e("round date",round_date+round_time);
                                     Schedule schedule = new Schedule(round_name, round_time, round_date, round_venue);
-                                    schedules.add(schedule);
+                                    scheduleList.add(schedule);
                                 }
-                                EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, schedules, img_url);
+                                EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, scheduleList, img_url);
                                 category = category.toLowerCase();
                                 Log.e("Cat",category);
                                 if (category.equals("general")) {

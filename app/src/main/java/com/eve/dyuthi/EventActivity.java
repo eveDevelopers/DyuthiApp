@@ -117,10 +117,15 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     }
 
     void callCoordinator(String phone){
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        Uri uri = Uri.parse("tel:" + phone.trim());
-        intent.setData(uri);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            Uri uri = Uri.parse("tel:" + phone.trim());
+            intent.setData(uri);
+            startActivity(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
     public void setColor(){
         Glide.with(this).asBitmap().
@@ -173,6 +178,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
     }
+
+
     @Override
     public void onBackPressed()
     {

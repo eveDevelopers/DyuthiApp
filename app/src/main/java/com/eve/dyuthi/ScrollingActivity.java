@@ -93,10 +93,15 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences.Editor editor = i_value.edit();
         editor.putInt("i_value", 0);
         editor.commit();
+        SharedPreferences sharedPreferences = getSharedPreferences("lists", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = sharedPreferences.edit();
+        editor1.clear();
+        editor1.commit();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(0);
         Glide.with(this).load(R.drawable.day2).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
@@ -212,14 +217,17 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             artitemList = new ArrayList<>();
             otheritemList = new ArrayList<>();
             schedules = new ArrayList<>();
-            if (i == 0) {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
+            if (i < 2) {
+                Log.e("first","workingIf");
                 SharedPreferences.Editor editor = i_value.edit();
-                editor.putInt("i_value", 1);
+                i++;
+                editor.putInt("i_value", i);
                 editor.commit();
                 CollectEvent();
 
             } else {
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
+                Log.e("first","working");
                 Gson gson = new Gson();
                 Type type = new TypeToken<List<EventlistItem>>() {
                 }.getType();
@@ -300,6 +308,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                                     prize = 0;
                                 }
                                 String img_url = data1.getString("poster");
+                                img_url = "https://dyuthi.live/static/"+ img_url;
                                 JSONArray jsonArray2 = data1.getJSONArray("schedule");
                                 schedules.clear();
                                 for (int k = 0; k < jsonArray2.length(); k++) {

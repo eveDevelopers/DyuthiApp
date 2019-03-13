@@ -101,7 +101,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(0);
+        //mViewPager.setOffscreenPageLimit(0);
         Glide.with(this).load(R.drawable.day2).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
@@ -224,7 +224,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 i++;
                 editor.putInt("i_value", i);
                 editor.commit();
-                CollectEvent();
+                CollectEvent(i);
 
             } else {
                 Log.e("first","working");
@@ -276,7 +276,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             return rootView;
         }
 
-        public void CollectEvent() {
+        public void CollectEvent(final int i) {
             final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, event_url, new Response.Listener<String>() {
                 @Override
@@ -337,8 +337,13 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                             }
                         }
                         Log.e("length_mus", String.valueOf(musicitemList.size()));
-                        adapter = new EventAdapter(getContext(), generalitemList);
-                        recyclerView.setAdapter(adapter);
+                        if(i==1) {
+                            adapter = new EventAdapter(getContext(), generalitemList);
+                            recyclerView.setAdapter(adapter);
+                        }else  if(i==2){
+                            adapter = new EventAdapter(getContext(), musicitemList);
+                            recyclerView.setAdapter(adapter);
+                        }
                         SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
                         SharedPreferences.Editor edit_list = sharedPreferences.edit();
                         Gson gson = new Gson();

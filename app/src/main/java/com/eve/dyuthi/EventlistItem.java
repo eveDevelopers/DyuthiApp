@@ -4,17 +4,17 @@ import java.util.List;
 
 public class EventlistItem {
 
-    private String event_name,event_desc,coordinator_name,coordiator_phone,category,event_fees;
+    private String event_name,event_desc,coordinator_name,coordinator_phone,category,event_fees;
     private  int prize;
     private List<Schedule> schedule;
     private String img_url;
 
 
-    public EventlistItem(String event_name, String event_desc, String coordinator_name, String coordiator_phone, String category, String event_fees, int prize, List<Schedule> schedule, String img_url) {
+    public EventlistItem(String event_name, String event_desc, String coordinator_name, String coordinator_phone, String category, String event_fees, int prize, List<Schedule> schedule, String img_url) {
         this.event_name = event_name;
         this.event_desc = event_desc;
         this.coordinator_name = coordinator_name;
-        this.coordiator_phone = coordiator_phone;
+        this.coordinator_phone = coordinator_phone;
         this.category = category;
         this.event_fees = event_fees;
         this.prize = prize;
@@ -35,8 +35,8 @@ public class EventlistItem {
         return coordinator_name;
     }
 
-    public String getCoordiator_phone() {
-        return coordiator_phone;
+    public String getCoordinator_phone() {
+        return coordinator_phone;
     }
 
     public String getCategory() {

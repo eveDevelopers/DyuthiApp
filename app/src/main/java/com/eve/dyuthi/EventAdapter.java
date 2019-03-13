@@ -52,6 +52,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         String date_time;
         try {
             date_time = ev.getSchedule().get(0).getRound_time()+","+ev.getSchedule().get(0).getRound_date();
+            Log.e("date_time",date_time);
         }catch (Exception e){
             date_time = "";
         }

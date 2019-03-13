@@ -15,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,6 +42,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     LinearLayout coordinator_name_layout,cash;
     EventlistItem eventlistItem;
     TextView fee,prize;
+    View view_bg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         cash = findViewById(R.id.cash);
         fee = findViewById(R.id.fee);
         prize = findViewById(R.id.prize);
+        view_bg = findViewById(R.id.view);
         coordinator_name_layout.setOnClickListener(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,15 +85,16 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             Gson gson = new Gson();
             String obj = getIntent().getStringExtra("object");
             eventlistItem = gson.fromJson(obj,EventlistItem.class);
-            Glide.with(this).load(eventlistItem.getImg_url()).into(toolbar_image);
+           // Glide.with(this).load(eventlistItem.getImg_url()).into(toolbar_image);
+            setColor(eventlistItem.getImg_url());
             coordinator_name.setText(eventlistItem.getCoordinator_name());
             String date_t = getDateTimeString(eventlistItem);
             date_time.setText(date_t);
             String venue_t = getVenueString(eventlistItem);
             venue.setText(venue_t);
             getSupportActionBar().setTitle(eventlistItem.getEvent_name());
-            description.setText(eventlistItem.getEvent_desc());
             phone = eventlistItem.getCoordinator_phone();
+            description.setText(Html.fromHtml(eventlistItem.getEvent_desc()).toString().replaceAll("\"",""));
             fee.setText("Registration fees: "+eventlistItem.getEvent_fees());
             prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));
         }
@@ -104,7 +109,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             rounds+=schedule.getRound_name()+" : "+schedule.getRound_date()+","+schedule.getRound_time();
             rounds+="\n";
         }
-        return rounds;
+        return rounds.trim();
     }
     private String getVenueString(EventlistItem eventlistItem) {
         String rounds = "";
@@ -114,7 +119,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             rounds+=schedule.getRound_name()+" : "+schedule.getRound_venue();
             rounds+="\n";
         }
-        return rounds;
+        return rounds.trim();
     }
 
     void callCoordinator(String phone){
@@ -128,14 +133,14 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         }
 
     }
-    public void setColor(){
+    public void setColor(String img_url){
         Glide.with(this).asBitmap().
-                load(R.drawable.agam).
+                load(img_url).
                 into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         toolbar_image.setImageBitmap(resource);
-                        toolbar_image.setScaleType(ImageView.ScaleType.CENTER);
+                        toolbar_image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         Palette.from(resource)
                                 .generate(new Palette.PaletteAsyncListener() {
                                     @Override
@@ -153,7 +158,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
                                             );
                                         }
-                                        toolbar_image.setBackground(gd);
+                                        view_bg.setBackground(gd);
                                         Window window = getWindow();
 //
                                         // clear FLAG_TRANSLUCENT_STATUS flag:

@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private ViewPager mViewPager;
     CardView day2, day3, day4;
     ImageView dayImage2, dayImage3, dayImage4;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +107,25 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         Glide.with(this).load(R.drawable.day2).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         //tabLayout.getTabAt(0).setIcon(R.drawable.dance);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+    }
+
+    public void refresh(){
+        SharedPreferences i_value = getSharedPreferences("i_value", MODE_PRIVATE);
+        SharedPreferences.Editor editor = i_value.edit();
+        editor.putInt("i_value", 0);
+        editor.commit();
+        SharedPreferences sharedPreferences = getSharedPreferences("lists", MODE_PRIVATE);
+        SharedPreferences.Editor editor1 = sharedPreferences.edit();
+        editor1.clear();
+        editor1.commit();
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
@@ -183,6 +200,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         String event_url = "https://dyuthi.live/get_events/";
         private RecyclerView.Adapter adapter;
         private RecyclerView recyclerView;
+        private ProgressBar progressBar;
         int i;
 
         public PlaceholderFragment() {
@@ -208,6 +226,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             SharedPreferences i_value = getContext().getSharedPreferences("i_value", MODE_PRIVATE);
             i = i_value.getInt("i_value", 0);
             recyclerView = rootView.findViewById(R.id.view_list);
+            progressBar = rootView.findViewById(R.id.progress_circular);
             recyclerView.hasFixedSize();
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             generalitemList = new ArrayList<>();
@@ -227,48 +246,58 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 CollectEvent(i);
 
             } else {
-                Log.e("first","working");
+                Log.e("first", "working");
                 Gson gson = new Gson();
                 Type type = new TypeToken<List<EventlistItem>>() {
                 }.getType();
                 String obj_str;
-                switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
-                    case 1:
-                        obj_str = sharedPreferences.getString("gen_list", "");
-                        generalitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), generalitemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
-                    case 2:
-                        obj_str = sharedPreferences.getString("mus_list", "");
-                        musicitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), musicitemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
-                    case 3:
-                        obj_str = sharedPreferences.getString("dance_list", "");
-                        danceitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), danceitemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
-                    case 4:
-                        obj_str = sharedPreferences.getString("lit_list", "");
-                        literatureitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), literatureitemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
-                    case 5:
-                        obj_str = sharedPreferences.getString("art_list", "");
-                        artitemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), artitemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
-                    case 6:
-                        obj_str = sharedPreferences.getString("other_list", "");
-                        otheritemList = gson.fromJson(obj_str, type);
-                        adapter = new EventAdapter(getContext(), otheritemList);
-                        recyclerView.setAdapter(adapter);
-                        break;
+                try {
+                    switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
+                        case 1:
+                            obj_str = sharedPreferences.getString("gen_list", "");
+                            generalitemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", generalitemList.toString());
+                            adapter = new EventAdapter(getContext(), generalitemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                        case 2:
+                            obj_str = sharedPreferences.getString("mus_list", "");
+                            musicitemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", musicitemList.toString());
+                            adapter = new EventAdapter(getContext(), musicitemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                        case 3:
+                            obj_str = sharedPreferences.getString("dance_list", "");
+                            danceitemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", danceitemList.toString());
+                            adapter = new EventAdapter(getContext(), danceitemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                        case 4:
+                            obj_str = sharedPreferences.getString("lit_list", "");
+                            literatureitemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", literatureitemList.toString());
+                            adapter = new EventAdapter(getContext(), literatureitemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                        case 5:
+                            obj_str = sharedPreferences.getString("art_list", "");
+                            artitemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", artitemList.toString());
+                            adapter = new EventAdapter(getContext(), artitemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                        case 6:
+                            obj_str = sharedPreferences.getString("other_list", "");
+                            otheritemList = gson.fromJson(obj_str, type);
+                            Log.e("jsong", otheritemList.toString());
+                            adapter = new EventAdapter(getContext(), otheritemList);
+                            recyclerView.setAdapter(adapter);
+                            break;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
             //textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -277,10 +306,14 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         }
 
         public void CollectEvent(final int i) {
+            recyclerView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
             final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET, event_url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
                     try {
                         Log.e("response", response);
                         JSONObject jsonObject = new JSONObject(response);
@@ -314,6 +347,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                                     String round_time = data2.getString("round_time");
                                     String round_date = data2.getString("round_date");
                                     String round_venue = data2.getString("round_venue");
+                                    Log.e("round date",round_date+round_time);
                                     Schedule schedule = new Schedule(round_name, round_time, round_date, round_venue);
                                     schedules.add(schedule);
                                 }
@@ -369,8 +403,11 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                     error.printStackTrace();
                     Log.e("error", error.toString());
+                    Toast.makeText(getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
                 }
             });
             requestQueue.add(stringRequest);
@@ -420,6 +457,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(ScrollingActivity.this, About.class));
+            return true;
+        }else if(id == R.id.refresh){
+            refresh();
             return true;
         }
 

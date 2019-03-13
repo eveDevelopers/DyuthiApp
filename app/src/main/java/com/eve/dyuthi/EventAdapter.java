@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public EventAdapter (Context context, List<EventlistItem> eventlistItemList){
         this.context = context;
         this.eventlistItemList = eventlistItemList;
+//        Log.e("item_count",String.valueOf(this.eventlistItemList.size()));
     }
 
     @Override
@@ -40,7 +42,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final EventlistItem ev = eventlistItemList.get(i);
         Glide.with(context).load(ev.getImg_url()).into(holder.imageView);
         holder.Name.setText(ev.getEvent_name());
-        String date_time = ev.getSchedule().get(0).getRound_time()+","+ev.getSchedule().get(0).getRound_date();
+        String date_time;
+        try {
+            date_time = ev.getSchedule().get(0).getRound_time()+","+ev.getSchedule().get(0).getRound_date();
+        }catch (Exception e){
+            date_time = "";
+        }
+
         holder.date.setText(date_time);
         holder.cardItem.setOnClickListener(new View.OnClickListener() {
             @Override

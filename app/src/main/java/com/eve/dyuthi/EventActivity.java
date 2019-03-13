@@ -89,7 +89,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             venue.setText(venue_t);
             getSupportActionBar().setTitle(eventlistItem.getEvent_name());
             description.setText(eventlistItem.getEvent_desc());
-            fee.setText("Registration fees: "+String.valueOf(eventlistItem.getEvent_fees()));
+            fee.setText("Registration fees: "+eventlistItem.getEvent_fees());
             prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));
         }
 

@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.app.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.sip.SipSession;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,12 +44,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.Paths.get;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -67,8 +71,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    CardView day2,day3,day4;
-    ImageView dayImage2,dayImage3,dayImage4;
+    CardView day2, day3, day4;
+    ImageView dayImage2, dayImage3, dayImage4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,11 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         day2.setOnClickListener(this);
         day3.setOnClickListener(this);
         day4.setOnClickListener(this);
+        SharedPreferences i_value = getSharedPreferences("i_value", MODE_PRIVATE);
+        SharedPreferences.Editor editor = i_value.edit();
+        editor.putInt("i_value", 0);
+        editor.commit();
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -96,61 +105,60 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         //tabLayout.getTabAt(0).setIcon(R.drawable.dance);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.day2:
-                Intent intent = new Intent(ScrollingActivity.this  , EventActivity.class);
-                intent.putExtra("image_id",R.drawable.day2);
-                intent.putExtra("name","Live Concert");
-                intent.putExtra("coordinator_name","Philip Paul");
-                intent.putExtra("coordinator_no","8281742377");
-                intent.putExtra("date","15/03/19");
-                intent.putExtra("venue","Main Ground,Government Engineering College, Thrissur");
-                intent.putExtra("description",getString(R.string.large_text));
-                ActivityOptionsCompat options =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                Intent intent = new Intent(ScrollingActivity.this, EventActivity.class);
+                intent.putExtra("image_id", R.drawable.day2);
+                intent.putExtra("name", "Live Concert");
+                intent.putExtra("coordinator_name", "Philip Paul");
+                intent.putExtra("coordinator_no", "8281742377");
+                intent.putExtra("date", "15/03/19");
+                intent.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
+                intent.putExtra("description", getString(R.string.large_text));
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
-                         dayImage2,
+                        dayImage2,
                         "simple_activity_transition");
 
-                startActivity(intent , options.toBundle());
+                startActivity(intent, options.toBundle());
                 break;
             case R.id.day3:
-                Intent intent2 = new Intent(ScrollingActivity.this  , EventActivity.class);
-                intent2.putExtra("image_id",R.drawable.agam);
-                intent2.putExtra("name","Agam");
-                intent2.putExtra("coordinator_name","Philip Paul");
-                intent2.putExtra("coordinator_no","8281742377");
-                intent2.putExtra("date","16/03/19");
-                intent2.putExtra("venue","Main Ground,Government Engineering College, Thrissur");
-                intent2.putExtra("description",getString(R.string.large_text));
-                ActivityOptionsCompat options2 =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                Intent intent2 = new Intent(ScrollingActivity.this, EventActivity.class);
+                intent2.putExtra("image_id", R.drawable.agam);
+                intent2.putExtra("name", "Agam");
+                intent2.putExtra("coordinator_name", "Philip Paul");
+                intent2.putExtra("coordinator_no", "8281742377");
+                intent2.putExtra("date", "16/03/19");
+                intent2.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
+                intent2.putExtra("description", getString(R.string.large_text));
+                ActivityOptionsCompat options2 = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
                         dayImage3,
                         "simple_activity_transition");
 
-                startActivity(intent2 , options2.toBundle());
+                startActivity(intent2, options2.toBundle());
                 break;
 
             case R.id.day4:
 
-                Intent intent3 = new Intent(ScrollingActivity.this  , EventActivity.class);
-                intent3.putExtra("image_id",R.drawable.nucleya);
-                intent3.putExtra("name","Nucleya");
-                intent3.putExtra("coordinator_name","Philip Paul");
-                intent3.putExtra("coordinator_no","8281742377");
-                intent3.putExtra("date","17/03/19");
-                intent3.putExtra("venue","Main Ground,Government Engineering College, Thrissur");
-                intent3.putExtra("description",getString(R.string.large_text));
-                ActivityOptionsCompat options3 =ActivityOptionsCompat.makeSceneTransitionAnimation(
+                Intent intent3 = new Intent(ScrollingActivity.this, EventActivity.class);
+                intent3.putExtra("image_id", R.drawable.nucleya);
+                intent3.putExtra("name", "Nucleya");
+                intent3.putExtra("coordinator_name", "Philip Paul");
+                intent3.putExtra("coordinator_no", "8281742377");
+                intent3.putExtra("date", "17/03/19");
+                intent3.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
+                intent3.putExtra("description", getString(R.string.large_text));
+                ActivityOptionsCompat options3 = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this,
                         dayImage4,
                         "simple_activity_transition");
 
-                startActivity(intent3 , options3.toBundle());
+                startActivity(intent3, options3.toBundle());
 
                 break;
         }
@@ -165,11 +173,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        private List<EventlistItem> generalitemList,musicitemList,danceitemList,literatureitemList,artitemList,otheritemList;
+        private List<EventlistItem> generalitemList, musicitemList, danceitemList, literatureitemList, artitemList, otheritemList;
         private List<Schedule> schedules;
-        String event_url="http://192.168.43.183:8000/events/";
+        String event_url = "https://dyuthi.live/get_events/";
         private RecyclerView.Adapter adapter;
         private RecyclerView recyclerView;
+        int i;
 
         public PlaceholderFragment() {
         }
@@ -190,105 +199,163 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-           // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            SharedPreferences i_value = getContext().getSharedPreferences("i_value", MODE_PRIVATE);
+            i = i_value.getInt("i_value", 0);
             recyclerView = rootView.findViewById(R.id.view_list);
             recyclerView.hasFixedSize();
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            generalitemList= new ArrayList<>();
+            generalitemList = new ArrayList<>();
             musicitemList = new ArrayList<>();
             danceitemList = new ArrayList<>();
-            literatureitemList=new ArrayList<>();
-            artitemList=new ArrayList<>();
+            literatureitemList = new ArrayList<>();
+            artitemList = new ArrayList<>();
             otheritemList = new ArrayList<>();
             schedules = new ArrayList<>();
-            CollectEvent();
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
-                case 1 :    adapter = new EventAdapter(getContext(),generalitemList);
-                            recyclerView.setAdapter(adapter);
-                case 2 :    adapter = new EventAdapter(getContext(),musicitemList);
-                            recyclerView.setAdapter(adapter);
-                case 3 :    adapter = new EventAdapter(getContext(),danceitemList);
-                            recyclerView.setAdapter(adapter);
-                case 4 :    adapter = new EventAdapter(getContext(),literatureitemList);
-                            recyclerView.setAdapter(adapter);
-                case 5 :    adapter = new EventAdapter(getContext(),artitemList);
-                            recyclerView.setAdapter(adapter);
-                case 6 :    adapter = new EventAdapter(getContext(),otheritemList);
-                            recyclerView.setAdapter(adapter);
+            if (i == 0) {
+                SharedPreferences.Editor editor = i_value.edit();
+                editor.putInt("i_value", 1);
+                editor.commit();
+                CollectEvent();
+
+            } else {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<EventlistItem>>() {
+                }.getType();
+                String obj_str;
+                switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
+                    case 1:
+                        obj_str = sharedPreferences.getString("gen_list", "");
+                        generalitemList = gson.fromJson(obj_str, type);
+                        //adapter = new EventAdapter(getContext(), generalitemList);
+                        //recyclerView.setAdapter(adapter);
+                        break;
+                    case 2:
+                        obj_str = sharedPreferences.getString("mus_list", "");
+                        musicitemList = gson.fromJson(obj_str, type);
+                        adapter = new EventAdapter(getContext(), musicitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 3:
+                        obj_str = sharedPreferences.getString("dance_list", "");
+                        danceitemList = gson.fromJson(obj_str, type);
+                        adapter = new EventAdapter(getContext(), danceitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 4:
+                        obj_str = sharedPreferences.getString("lit_list", "");
+                        literatureitemList = gson.fromJson(obj_str, type);
+                        adapter = new EventAdapter(getContext(), literatureitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 5:
+                        obj_str = sharedPreferences.getString("art_list", "");
+                        artitemList = gson.fromJson(obj_str, type);
+                        adapter = new EventAdapter(getContext(), artitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 6:
+                        obj_str = sharedPreferences.getString("other_list", "");
+                        otheritemList = gson.fromJson(obj_str, type);
+                        adapter = new EventAdapter(getContext(), otheritemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                }
             }
             //textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
 
             return rootView;
         }
 
-        public void CollectEvent(){
+        public void CollectEvent() {
             final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, event_url, new Response.Listener<String>() {
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, event_url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
+                        Log.e("response", response);
                         JSONObject jsonObject = new JSONObject(response);
+
                         JSONArray jsonArray = jsonObject.getJSONArray("event_list");
-                        for(int i =0;i<jsonArray.length();i++)
-                        {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject data = jsonArray.getJSONObject(i);
-                            //Log.e("response",data.get("category").toString());
+
                             JSONArray jsonArray1 = data.getJSONArray("events");
-                            for(int j=0;j<jsonArray1.length();j++){
-                                JSONObject data1 =  jsonArray1.getJSONObject(j);
+                            for (int j = 0; j < jsonArray1.length(); j++) {
+                                JSONObject data1 = jsonArray1.getJSONObject(j);
                                 String event_name = data1.getString("event_name");
                                 String event_desc = data1.getString("event_desc");
                                 String coordinator_name = data1.getString("coordinator_name");
-                                String coordinator_phone =  data1.getString("coordinator_phone");
-                                int event_fees = data1.getInt("event_fees");
+                                String coordinator_phone = data1.getString("coordinator_phone");
+                                String event_fees = data1.getString("event_fees");
                                 String category = data1.getString("category");
-                                int prize = data1.getInt("prize");
+                                int prize;
+                                try {
+                                    prize = data1.getInt("prize");
+                                } catch (Exception e) {
+                                    prize = 0;
+                                }
                                 String img_url = data1.getString("poster");
-                                JSONArray jsonArray2 = data1.getJSONArray("schedules");
-                                for(int k=0;k<jsonArray2.length();k++)
-                                {
+                                JSONArray jsonArray2 = data1.getJSONArray("schedule");
+                                schedules.clear();
+                                for (int k = 0; k < jsonArray2.length(); k++) {
                                     JSONObject data2 = jsonArray2.getJSONObject(k);
                                     String round_name = data2.getString("round_name");
                                     String round_time = data2.getString("round_time");
                                     String round_date = data2.getString("round_date");
                                     String round_venue = data2.getString("round_venue");
-                                    Schedule schedule = new Schedule(round_name,round_time,round_date,round_venue);
+                                    Schedule schedule = new Schedule(round_name, round_time, round_date, round_venue);
                                     schedules.add(schedule);
                                 }
-                                EventlistItem eventlistItem = new EventlistItem(event_name,event_desc,coordinator_name,coordinator_phone,category,event_fees,prize,schedules,img_url);
-                                switch(category){
-                                    case "general":
-                                        generalitemList.add(eventlistItem);
-                                        break;
-                                    case  "music" :
-                                        musicitemList.add(eventlistItem);
-                                        break;
-                                    case  "dance" :
-                                        danceitemList.add(eventlistItem);
-                                        break;
-                                    case  "literature" :
-                                        literatureitemList.add(eventlistItem);
-                                        break;
-                                    case  "art" :
-                                        artitemList.add(eventlistItem);
-                                        break;
-                                    case   "others" :
-                                        otheritemList.add(eventlistItem);
-                                        break;
+                                EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, schedules, img_url);
+                                category = category.toLowerCase();
+                                if (category.equals("general")) {
+                                    generalitemList.add(eventlistItem);
+                                } else if (category.equals("music")) {
+                                    musicitemList.add(eventlistItem);
+                                } else if (category.equals("dance")) {
+                                    danceitemList.add(eventlistItem);
+                                } else if (category.equals("literature")) {
+                                    literatureitemList.add(eventlistItem);
+                                } else if (category.equals("art")) {
+                                    artitemList.add(eventlistItem);
+                                } else if (category.equals("others")) {
+                                    otheritemList.add(eventlistItem);
                                 }
+
                             }
                         }
+                        Log.e("length_mus", String.valueOf(musicitemList.size()));
+//                        adapter = new EventAdapter(getContext(), generalitemList);
+//                        recyclerView.setAdapter(adapter);
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
+                        SharedPreferences.Editor edit_list = sharedPreferences.edit();
+                        Gson gson = new Gson();
+                        String object_gen = gson.toJson(generalitemList);
+                        String object_mus = gson.toJson(musicitemList);
+                        String object_dance = gson.toJson(danceitemList);
+                        String object_lit = gson.toJson(literatureitemList);
+                        String object_art = gson.toJson(artitemList);
+                        String object_other = gson.toJson(otheritemList);
+                        edit_list.putString("gen_list", object_gen);
+                        edit_list.putString("mus_list", object_mus);
+                        edit_list.putString("dance_list", object_dance);
+                        edit_list.putString("lit_list", object_lit);
+                        edit_list.putString("art_list", object_art);
+                        edit_list.putString("other_list", object_other);
+                        edit_list.commit();
                         //Log.e("event_namre",itemList.toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.e("jsonerror",e.toString());
+                        Log.e("jsonerror", e.toString());
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Log.e("error",error.toString());
+                    Log.e("error", error.toString());
                 }
             });
             requestQueue.add(stringRequest);
@@ -337,7 +404,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(ScrollingActivity.this,About.class));
+            startActivity(new Intent(ScrollingActivity.this, About.class));
             return true;
         }
 

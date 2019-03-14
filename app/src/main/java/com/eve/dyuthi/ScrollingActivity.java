@@ -120,7 +120,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         mViewPager = findViewById(R.id.container);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         //mViewPager.setOffscreenPageLimit(0);
-        Glide.with(this).load(R.drawable.day2).into(dayImage2);
+        Glide.with(this).load(R.drawable.gow).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
         CollectEvent();
@@ -142,11 +142,11 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.day2:
                 Intent intent = new Intent(ScrollingActivity.this, EventActivity.class);
-                intent.putExtra("image_id", R.drawable.day2);
+                intent.putExtra("image_id", R.drawable.gow);
                 intent.putExtra("name", "GOWRY LAKSHMI");
                 intent.putExtra("coordinator_name", "Contact");
                 intent.putExtra("coordinator_no", "8089521307");
-                intent.putExtra("date", "15/03/19");
+                intent.putExtra("date", "15 March");
                 intent.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent.putExtra("description", getString(R.string.gowry));
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -162,7 +162,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 intent2.putExtra("name", "AGAM NITE");
                 intent2.putExtra("coordinator_name", "Contact");
                 intent2.putExtra("coordinator_no", "9562466182");
-                intent2.putExtra("date", "16/03/19");
+                intent2.putExtra("date", "16 March");
                 intent2.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent2.putExtra("description", getString(R.string.agam1));
                 ActivityOptionsCompat options2 = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -180,7 +180,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 intent3.putExtra("name", "NUCLEYA");
                 intent3.putExtra("coordinator_name", "Contact");
                 intent3.putExtra("coordinator_no", "9562466182");
-                intent3.putExtra("date", "17/03/19");
+                intent3.putExtra("date", "17 March");
                 intent3.putExtra("venue", "Main Ground,Government Engineering College, Thrissur");
                 intent3.putExtra("description", getString(R.string.nucleya));
                 ActivityOptionsCompat options3 = ActivityOptionsCompat.makeSceneTransitionAnimation(

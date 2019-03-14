@@ -9,11 +9,21 @@
     android:fillViewport="true"
     tools:showIn="@layout/activity_scrolling">
 
+
     <LinearLayout
+        android:id="@+id/listMode"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:visibility="visible"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -21,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             app:tabGravity="center"
+            android:visibility="visible"
             app:tabIndicatorHeight="1dp">
 
             <android.support.design.widget.TabItem
@@ -61,12 +72,19 @@
                 android:layout_height="wrap_content"
                 android:text="OTHERS" />
 
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SPONSORS" />
+
 
         </android.support.design.widget.TabLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"
+            android:visibility="visible"
             android:layout_height="match_parent">
         </android.support.v4.view.ViewPager>
 

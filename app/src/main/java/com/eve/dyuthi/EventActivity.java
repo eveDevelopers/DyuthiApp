@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +36,7 @@ import java.util.List;
 public class EventActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    ImageView toolbar_image;
+    ImageView toolbar_image,insider;
     CollapsingToolbarLayout ctb;
     int image_id;
     TextView coordinator_name,venue,description,date_time;
@@ -43,6 +45,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     EventlistItem eventlistItem;
     TextView fee,prize;
     View view_bg;
+    LinearLayout book,book_my_show;
+    String nucleya_book_my_show = "https://in.bookmyshow.com/events/dyuthi-2019/ET00097642";
+    String nucleya_insider = "https://insider.in/dyuthi-march17-2019/event";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +66,12 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         fee = findViewById(R.id.fee);
         prize = findViewById(R.id.prize);
         view_bg = findViewById(R.id.view);
+        book = findViewById(R.id.book);
+        book_my_show = findViewById(R.id.book_my_show);
+        insider = findViewById(R.id.insider);
         coordinator_name_layout.setOnClickListener(this);
-
+        book_my_show.setOnClickListener(this);
+        insider.setOnClickListener(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //setColor();
         setData();
@@ -74,7 +83,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         image_id = getIntent().getIntExtra("image_id",-1);
         if(image_id!=-1){
             Glide.with(this).load(image_id).into(toolbar_image);
-            getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
+            String name = getIntent().getStringExtra("name");
+            if(name.equals("NUCLEYA")){
+                book.setVisibility(View.VISIBLE);
+            }
+            getSupportActionBar().setTitle(name);
             coordinator_name.setText(getIntent().getStringExtra("coordinator_name"));
             date_time.setText(getIntent().getStringExtra("date"));
             venue.setText(getIntent().getStringExtra("venue"));
@@ -92,7 +105,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             date_time.setText(date_t);
             String venue_t = getVenueString(eventlistItem);
             venue.setText(venue_t);
-            getSupportActionBar().setTitle(eventlistItem.getEvent_name());
+            String name = eventlistItem.getEvent_name();
+            getSupportActionBar().setTitle(name);
             phone = eventlistItem.getCoordinator_phone();
             description.setText(eventlistItem.getRenderedDescription().replaceAll("\"",""));
             //
@@ -204,6 +218,24 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 case R.id.coordinator_name_layout:
                     callCoordinator(phone);
                     break;
+                case R.id.book_my_show:
+                    open_tab(nucleya_book_my_show);
+                    break;
+                case R.id.insider:
+                    open_tab(nucleya_insider);
+                    break;
             }
+    }
+
+    private void open_tab(String link) {
+        Uri uri = Uri.parse(link);
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setShowTitle(true);
+        intentBuilder.setToolbarColor(ContextCompat.getColor(EventActivity.this, R.color.normal_white));
+        intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(EventActivity.this, R.color.normal_white));
+        intentBuilder.setStartAnimations(EventActivity.this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        intentBuilder.setExitAnimations(EventActivity.this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
+        customTabsIntent.launchUrl(EventActivity.this, uri);
     }
 }

@@ -7,8 +7,10 @@ import android.app.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.net.sip.SipSession;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -16,8 +18,10 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,6 +79,10 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     CardView day2, day3, day4;
     ImageView dayImage2, dayImage3, dayImage4;
     TabLayout tabLayout;
+    FloatingActionButton register;
+    String event_url = "https://dyuthi.live/get_events/";
+    private List<EventlistItem> generalitemList, musicitemList, danceitemList, literatureitemList, artitemList, otheritemList;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +96,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         dayImage2 = findViewById(R.id.dayImg2);
         dayImage3 = findViewById(R.id.dayImg3);
         dayImage4 = findViewById(R.id.dayImg4);
+        progressBar = findViewById(R.id.progress_circular);
+        register  = findViewById(R.id.register);
         day2.setOnClickListener(this);
         day3.setOnClickListener(this);
         day4.setOnClickListener(this);
+        register.setOnClickListener(this);
         SharedPreferences i_value = getSharedPreferences("i_value", MODE_PRIVATE);
         SharedPreferences.Editor editor = i_value.edit();
         editor.putInt("i_value", 0);
@@ -99,34 +110,31 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         SharedPreferences.Editor editor1 = sharedPreferences.edit();
         editor1.clear();
         editor1.commit();
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        generalitemList = new ArrayList<>();
+        musicitemList = new ArrayList<>();
+        danceitemList = new ArrayList<>();
+        literatureitemList = new ArrayList<>();
+        artitemList = new ArrayList<>();
+        otheritemList = new ArrayList<>();
+        tabLayout = findViewById(R.id.tabs);
         mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         //mViewPager.setOffscreenPageLimit(0);
         Glide.with(this).load(R.drawable.day2).into(dayImage2);
         Glide.with(this).load(R.drawable.agam).into(dayImage3);
         Glide.with(this).load(R.drawable.nucleya).into(dayImage4);
-        tabLayout = findViewById(R.id.tabs);
+        CollectEvent();
+    }
+
+    public void refresh() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         //tabLayout.getTabAt(0).setIcon(R.drawable.dance);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-    }
+        Toast.makeText(getApplicationContext(),"Refreshed",Toast.LENGTH_SHORT).show();
 
-    public void refresh(){
-        SharedPreferences i_value = getSharedPreferences("i_value", MODE_PRIVATE);
-        SharedPreferences.Editor editor = i_value.edit();
-        editor.putInt("i_value", 0);
-        editor.commit();
-        SharedPreferences sharedPreferences = getSharedPreferences("lists", MODE_PRIVATE);
-        SharedPreferences.Editor editor1 = sharedPreferences.edit();
-        editor1.clear();
-        editor1.commit();
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     @Override
@@ -183,7 +191,128 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 startActivity(intent3, options3.toBundle());
 
                 break;
+            case R.id.register:
+                open_tab("https://dyuthi.live/register/");
+                break;
         }
+    }
+
+    public void CollectEvent() {
+        generalitemList.clear();
+        musicitemList.clear();
+        danceitemList.clear();
+        literatureitemList.clear();
+        artitemList.clear();
+        otheritemList.clear();
+        tabLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, event_url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                tabLayout.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                try {
+                    Log.e("response", response);
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("event_list");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject data = jsonArray.getJSONObject(i);
+
+                        JSONArray jsonArray1 = data.getJSONArray("events");
+                        for (int j = 0; j < jsonArray1.length(); j++) {
+                            JSONObject data1 = jsonArray1.getJSONObject(j);
+                            String event_name = data1.getString("event_name");
+                            String event_desc = data1.getString("event_desc");
+                            String coordinator_name = data1.getString("coordinator_name");
+                            String coordinator_phone = data1.getString("coordinator_phone");
+                            String event_fees = data1.getString("event_fees");
+                            String category = data1.getString("category");
+                            int prize;
+                            try {
+                                prize = data1.getInt("prize");
+                            } catch (Exception e) {
+                                prize = 0;
+                            }
+                            String img_url = data1.getString("poster");
+                            img_url = "https://dyuthi.live/static/" + img_url;
+                            JSONArray jsonArray2 = data1.getJSONArray("schedule");
+                            List<Schedule> scheduleList = new ArrayList<>();
+                            //scheduleList.clear();
+                            for (int k = 0; k < jsonArray2.length(); k++) {
+                                JSONObject data2 = jsonArray2.getJSONObject(k);
+                                String round_name = data2.getString("round_name");
+                                String round_time = data2.getString("round_time");
+                                String round_date = data2.getString("round_date");
+                                String round_venue = data2.getString("round_venue");
+                                // Log.e("round date",round_date+round_time);
+                                Schedule schedule = new Schedule(round_name, round_time, round_date, round_venue);
+                                scheduleList.add(schedule);
+                            }
+                            EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, scheduleList, img_url);
+                            category = category.toLowerCase();
+                            Log.e("Cat", category);
+                            if (category.equals("general")) {
+                                generalitemList.add(eventlistItem);
+                            } else if (category.equals("music")) {
+                                musicitemList.add(eventlistItem);
+                            } else if (category.equals("dance")) {
+                                danceitemList.add(eventlistItem);
+                            } else if (category.equals("literature")) {
+                                literatureitemList.add(eventlistItem);
+                            } else if (category.equals("art")) {
+                                artitemList.add(eventlistItem);
+                            } else if (category.equals("talk/stage/theatre")) {
+                                otheritemList.add(eventlistItem);
+                            }
+
+                        }
+                    }
+                    Log.e("length_mus", String.valueOf(musicitemList.size()));
+                    SharedPreferences sharedPreferences = getSharedPreferences("lists", MODE_PRIVATE);
+                    SharedPreferences.Editor edit_list = sharedPreferences.edit();
+                    Gson gson = new Gson();
+                    String object_gen = gson.toJson(generalitemList);
+                    String object_mus = gson.toJson(musicitemList);
+                    String object_dance = gson.toJson(danceitemList);
+                    String object_lit = gson.toJson(literatureitemList);
+                    String object_art = gson.toJson(artitemList);
+                    String object_other = gson.toJson(otheritemList);
+                    edit_list.putString("gen_list", object_gen);
+                    edit_list.putString("mus_list", object_mus);
+                    edit_list.putString("dance_list", object_dance);
+                    edit_list.putString("lit_list", object_lit);
+                    edit_list.putString("art_list", object_art);
+                    edit_list.putString("other_list", object_other);
+                    edit_list.commit();
+                    refresh();
+                    //Log.e("event_namre",itemList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("jsonerror", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                tabLayout.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                error.printStackTrace();
+                //Log.e("error", error.toString());
+                try {
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        requestQueue.add(stringRequest);
+
     }
 
     /**
@@ -195,11 +324,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        private List<EventlistItem> generalitemList, musicitemList, danceitemList, literatureitemList, artitemList, otheritemList;
+        //        private List<EventlistItem> generalitemList, musicitemList, danceitemList, literatureitemList, artitemList, otheritemList;
         private List<Schedule> schedules;
         String event_url = "https://dyuthi.live/get_events/";
         private RecyclerView.Adapter adapter;
         private RecyclerView recyclerView;
+        private NestedScrollView sponsors;
         private ProgressBar progressBar;
         int i;
 
@@ -227,198 +357,95 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             i = i_value.getInt("i_value", 0);
             recyclerView = rootView.findViewById(R.id.view_list);
             progressBar = rootView.findViewById(R.id.progress_circular);
+            sponsors = rootView.findViewById(R.id.sponsors);
             recyclerView.hasFixedSize();
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            generalitemList = new ArrayList<>();
-            musicitemList = new ArrayList<>();
-            danceitemList = new ArrayList<>();
-            literatureitemList = new ArrayList<>();
-            artitemList = new ArrayList<>();
-            otheritemList = new ArrayList<>();
+//            generalitemList = new ArrayList<>();
+//            musicitemList = new ArrayList<>();
+//            danceitemList = new ArrayList<>();
+//            literatureitemList = new ArrayList<>();
+//            artitemList = new ArrayList<>();
+//            otheritemList = new ArrayList<>();
             schedules = new ArrayList<>();
             SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
-            if (i < 2) {
-                Log.e("first","workingIf");
-                SharedPreferences.Editor editor = i_value.edit();
-                i++;
-                editor.putInt("i_value", i);
-                editor.commit();
-                CollectEvent(i);
 
-            } else {
-                Log.e("first", "working");
-                Gson gson = new Gson();
-                Type type = new TypeToken<List<EventlistItem>>() {
-                }.getType();
-                String obj_str;
-                try {
-                    switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
-                        case 1:
-                            obj_str = sharedPreferences.getString("gen_list", "");
-                            generalitemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", generalitemList.toString());
-                            adapter = new EventAdapter(getContext(), generalitemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case 2:
-                            obj_str = sharedPreferences.getString("mus_list", "");
-                            musicitemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", musicitemList.toString());
-                            adapter = new EventAdapter(getContext(), musicitemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case 3:
-                            obj_str = sharedPreferences.getString("dance_list", "");
-                            danceitemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", danceitemList.toString());
-                            adapter = new EventAdapter(getContext(), danceitemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case 4:
-                            obj_str = sharedPreferences.getString("lit_list", "");
-                            literatureitemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", literatureitemList.toString());
-                            adapter = new EventAdapter(getContext(), literatureitemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case 5:
-                            obj_str = sharedPreferences.getString("art_list", "");
-                            artitemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", artitemList.toString());
-                            adapter = new EventAdapter(getContext(), artitemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                        case 6:
-                            obj_str = sharedPreferences.getString("other_list", "");
-                            otheritemList = gson.fromJson(obj_str, type);
-                            Log.e("jsong", otheritemList.toString());
-                            adapter = new EventAdapter(getContext(), otheritemList);
-                            recyclerView.setAdapter(adapter);
-                            break;
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
+            Log.e("first", "working");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<EventlistItem>>() {
+            }.getType();
+            String obj_str;
+            try {
+                switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
+                    case 1:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("gen_list", "");
+                        List<EventlistItem> generalitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", generalitemList.toString());
+                        adapter = new EventAdapter(getContext(), generalitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 2:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("mus_list", "");
+                        List<EventlistItem> musicitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", musicitemList.toString());
+                        adapter = new EventAdapter(getContext(), musicitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 3:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("dance_list", "");
+                        List<EventlistItem> danceitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", danceitemList.toString());
+                        adapter = new EventAdapter(getContext(), danceitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 4:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("lit_list", "");
+                        List<EventlistItem> literatureitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", literatureitemList.toString());
+                        adapter = new EventAdapter(getContext(), literatureitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 5:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("art_list", "");
+                        List<EventlistItem> artitemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", artitemList.toString());
+                        adapter = new EventAdapter(getContext(), artitemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 6:
+                        recyclerView.setVisibility(View.VISIBLE);
+                        sponsors.setVisibility(View.GONE);
+                        obj_str = sharedPreferences.getString("other_list", "");
+                        List<EventlistItem> otheritemList = gson.fromJson(obj_str, type);
+                        Log.e("jsong", otheritemList.toString());
+                        adapter = new EventAdapter(getContext(), otheritemList);
+                        recyclerView.setAdapter(adapter);
+                        break;
+                    case 7:
+                        recyclerView.setVisibility(View.GONE);
+                        sponsors.setVisibility(View.VISIBLE);
+                        break;
+
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             //textView.setText("Section: "+String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
 
             return rootView;
         }
 
-        public void CollectEvent(final int i) {
-            recyclerView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-            final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, event_url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
-                    try {
-                        Log.e("response", response);
-                        JSONObject jsonObject = new JSONObject(response);
 
-                        JSONArray jsonArray = jsonObject.getJSONArray("event_list");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject data = jsonArray.getJSONObject(i);
-
-                            JSONArray jsonArray1 = data.getJSONArray("events");
-                            for (int j = 0; j < jsonArray1.length(); j++) {
-                                JSONObject data1 = jsonArray1.getJSONObject(j);
-                                String event_name = data1.getString("event_name");
-                                String event_desc = data1.getString("event_desc");
-                                String coordinator_name = data1.getString("coordinator_name");
-                                String coordinator_phone = data1.getString("coordinator_phone");
-                                String event_fees = data1.getString("event_fees");
-                                String category = data1.getString("category");
-                                int prize;
-                                try {
-                                    prize = data1.getInt("prize");
-                                } catch (Exception e) {
-                                    prize = 0;
-                                }
-                                String img_url = data1.getString("poster");
-                                img_url = "https://dyuthi.live/static/"+ img_url;
-                                JSONArray jsonArray2 = data1.getJSONArray("schedule");
-                                List<Schedule> scheduleList = new ArrayList<>();
-                                //scheduleList.clear();
-                                for (int k = 0; k < jsonArray2.length(); k++) {
-                                    JSONObject data2 = jsonArray2.getJSONObject(k);
-                                    String round_name = data2.getString("round_name");
-                                    String round_time = data2.getString("round_time");
-                                    String round_date = data2.getString("round_date");
-                                    String round_venue = data2.getString("round_venue");
-                                   // Log.e("round date",round_date+round_time);
-                                    Schedule schedule = new Schedule(round_name, round_time, round_date, round_venue);
-                                    scheduleList.add(schedule);
-                                }
-                                EventlistItem eventlistItem = new EventlistItem(event_name, event_desc, coordinator_name, coordinator_phone, category, event_fees, prize, scheduleList, img_url);
-                                category = category.toLowerCase();
-                                Log.e("Cat",category);
-                                if (category.equals("general")) {
-                                    generalitemList.add(eventlistItem);
-                                } else if (category.equals("music")) {
-                                    musicitemList.add(eventlistItem);
-                                } else if (category.equals("dance")) {
-                                    danceitemList.add(eventlistItem);
-                                } else if (category.equals("literature")) {
-                                    literatureitemList.add(eventlistItem);
-                                } else if (category.equals("art")) {
-                                    artitemList.add(eventlistItem);
-                                } else if (category.equals("talk/stage/theatre")) {
-                                    otheritemList.add(eventlistItem);
-                                }
-
-                            }
-                        }
-                        Log.e("length_mus", String.valueOf(musicitemList.size()));
-                        if(i==1) {
-                            adapter = new EventAdapter(getContext(), generalitemList);
-                            recyclerView.setAdapter(adapter);
-                        }else  if(i==2){
-                            adapter = new EventAdapter(getContext(), musicitemList);
-                            recyclerView.setAdapter(adapter);
-                        }
-                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("lists", MODE_PRIVATE);
-                        SharedPreferences.Editor edit_list = sharedPreferences.edit();
-                        Gson gson = new Gson();
-                        String object_gen = gson.toJson(generalitemList);
-                        String object_mus = gson.toJson(musicitemList);
-                        String object_dance = gson.toJson(danceitemList);
-                        String object_lit = gson.toJson(literatureitemList);
-                        String object_art = gson.toJson(artitemList);
-                        String object_other = gson.toJson(otheritemList);
-                        edit_list.putString("gen_list", object_gen);
-                        edit_list.putString("mus_list", object_mus);
-                        edit_list.putString("dance_list", object_dance);
-                        edit_list.putString("lit_list", object_lit);
-                        edit_list.putString("art_list", object_art);
-                        edit_list.putString("other_list", object_other);
-                        edit_list.commit();
-                        //Log.e("event_namre",itemList.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.e("jsonerror", e.toString());
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    progressBar.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    error.printStackTrace();
-                    //Log.e("error", error.toString());
-                    try {
-                        Toast.makeText(getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                }
-            });
-            requestQueue.add(stringRequest);
-
-        }
     }
 
 
@@ -442,7 +469,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         @Override
         public int getCount() {
             // Show 6 total pages.
-            return 6;
+            return 7;
         }
     }
 
@@ -464,12 +491,23 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         if (id == R.id.action_settings) {
             startActivity(new Intent(ScrollingActivity.this, About.class));
             return true;
-        }else if(id == R.id.refresh){
-            refresh();
+        } else if (id == R.id.refresh) {
+            CollectEvent();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void open_tab(String link) {
+        Uri uri = Uri.parse(link);
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setShowTitle(true);
+        intentBuilder.setToolbarColor(ContextCompat.getColor(ScrollingActivity.this, R.color.normal_white));
+        intentBuilder.setSecondaryToolbarColor(ContextCompat.getColor(ScrollingActivity.this, R.color.normal_white));
+        intentBuilder.setStartAnimations(ScrollingActivity.this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        intentBuilder.setExitAnimations(ScrollingActivity.this, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
+        customTabsIntent.launchUrl(ScrollingActivity.this, uri);
     }
 
 

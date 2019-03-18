@@ -108,7 +108,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             String name = eventlistItem.getEvent_name();
             getSupportActionBar().setTitle(name);
             phone = eventlistItem.getCoordinator_phone();
-            description.setText(eventlistItem.getRenderedDescription().replaceAll("\"",""));
+            String desc = eventlistItem.getRenderedDescription().replaceAll("\"","");
+            if(desc.isEmpty()){
+                desc = "Description Not Provided";
+            }
+            description.setText(desc);
             //
             fee.setText("Registration fees: "+eventlistItem.getEvent_fees());
             prize.setText("Prizes Worth: "+String.valueOf(eventlistItem.getPrize()));

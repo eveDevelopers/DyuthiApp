@@ -89,7 +89,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap bmp, @Nullable Transition<? super Bitmap> transition) {
-                        holder.imageView.setImageBitmap(bmp);
+                        Glide.with(context).load(bmp).into(holder.imageView);
                         Palette.from(bmp)
                                 .generate(new Palette.PaletteAsyncListener() {
                                     @Override

@@ -3,9 +3,9 @@
     <item android:drawable="@color/normal_white"
         android:height="1200dp"
         android:width="1200dp"/>
-    <item android:drawable="@drawable/dyuthi_logo"
-        android:width="300dp"
-        android:height="425dp"
+    <item android:drawable="@drawable/dyuthi_logo_small"
+        android:width="200dp"
+        android:height="282dp"
         android:gravity="center">
 
     </item>
